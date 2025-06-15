@@ -1,0 +1,45 @@
+cin >> n;
+
+    for (int i = 0; i < n; ++i) {
+        Anggota a;
+        cout << "\nData Anggota ke-" << i+1 << endl;
+        cout << "Nama: "; cin >> a.nama;
+        cout << "NPM: "; cin >> a.npm;
+        cout << "Keahlian (Pidana/Perdata/Tata-Negara/Internasional): ";
+        cin >> a.keahlian;
+        a.totalJamLatihan = 0;
+        latihanSatuBulan(a);
+        ujianBesar(a);
+        daftar.push_back(a);
+    }
+
+    tampilkanHasil(daftar);
+
+    sort(daftar.begin(), daftar.end(), [](Anggota a, Anggota b) {
+        return nilaiAkhir(a) > nilaiAkhir(b);
+    });
+
+    vector<Anggota> timTerbaik;
+
+    cout << CYAN << "\nMenyeleksi tim terbaik..." << RESET << endl;
+    knapsackSeleksi(daftar, timTerbaik);
+
+    cout << "\n--- TIM TERBAIK ---\n";
+    for (auto& a : timTerbaik) {
+        cout << GREEN << a.nama << " - " << a.keahlian << " - Nilai Akhir: " << nilaiAkhir(a) << RESET << endl;
+    }
+
+    string cari;
+    cout << "\nMasukkan nama untuk dicari: ";
+    cin >> cari;
+    sort(daftar.begin(), daftar.end(), [](Anggota a, Anggota b) {
+        return a.nama < b.nama;
+    });
+    int idx = binarySearchNama(daftar, cari, 0, daftar.size()-1);
+    if (idx != -1)
+        cout << "Ditemukan: " << daftar[idx].nama << ", Keahlian: " << daftar[idx].keahlian << endl;
+    else
+        cout << "Tidak ditemukan." << endl;
+
+    return 0;
+}
