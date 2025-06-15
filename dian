@@ -1,0 +1,46 @@
+cout << c << flush;
+        Sleep(10); // delay 10 ms per karakter
+    }
+    cout << RESET << "\n\n";
+    Sleep(1000); // delay 1 detik
+    system("cls"); 
+}
+
+void sesiLatihan(Anggota& a, int minggu, int sesi) {
+    int jamMandiri;
+    cout << CYAN << "?? Minggu ke-" << minggu << ", sesi " << sesi << " bersama tutor (1 jam wajib)." << RESET << endl;
+    cout << "Masukkan jam belajar mandiri (maks 4): ";
+    cin >> jamMandiri;
+    jamMandiri = max(0, min(4, jamMandiri));
+    int totalSesiJam = 1 + jamMandiri;
+    a.totalJamLatihan += totalSesiJam;
+    a.logLatihan.push_back(totalSesiJam);
+}
+
+void latihanSatuBulan(Anggota& a) {
+    for (int minggu = 1; minggu <= 4; ++minggu) {
+        for (int sesi = 1; sesi <= 2; ++sesi) {
+            sesiLatihan(a, minggu, sesi);
+        }
+    }
+}
+
+void ujianBesar(Anggota& a) {
+    cout << "Masukkan skor ujian besar untuk " << a.nama << ": ";
+    cin >> a.skorUjian;
+}
+
+int nilaiAkhir(const Anggota& a) {
+    int bobotLatihan = min(a.totalJamLatihan, 40);
+    int nilaiLatihan = (bobotLatihan * 100) / 40;
+    return (a.skorUjian * 0.6) + (nilaiLatihan * 0.4);
+}
+
+int knapsackSeleksi(const vector<Anggota>& semuaAnggota, vector<Anggota>& hasil) {
+    int n = semuaAnggota.size();
+    int W = 4;
+    vector<vector<int>> dp(n+1, vector<int>(W+1, 0));
+    vector<vector<bool>> pilih(n+1, vector<bool>(W+1, false));
+
+    for (int i = 1; i <= n; ++i) {
+        int nilai = nilaiAkhir(semuaAnggota[i-1]);
