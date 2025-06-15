@@ -1,0 +1,45 @@
+int bobot = 1;
+        for (int w = 1; w <= W; ++w) {
+            if (bobot <= w && dp[i-1][w-bobot] + nilai > dp[i-1][w]) {
+                dp[i][w] = dp[i-1][w-bobot] + nilai;
+                pilih[i][w] = true;
+            } else {
+                dp[i][w] = dp[i-1][w];
+            }
+        }
+    }
+
+    int w = W;
+    for (int i = n; i >= 1; --i) {
+        if (pilih[i][w]) {
+            hasil.push_back(semuaAnggota[i-1]);
+            w -= 1;
+        }
+    }
+    return dp[n][W];
+}
+
+int binarySearchNama(const vector<Anggota>& data, string target, int kiri, int kanan) {
+    if (kiri > kanan) return -1;
+    int mid = (kiri + kanan) / 2;
+    if (data[mid].nama == target) return mid;
+    else if (target < data[mid].nama) return binarySearchNama(data, target, kiri, mid - 1);
+    else return binarySearchNama(data, target, mid + 1, kanan);
+}
+
+void tampilkanHasil(const vector<Anggota>& data) {
+    cout << "\n--- HASIL PENILAIAN FINAL ---\n";
+    for (const auto& a : data) {
+        cout << "Nama: " << a.nama << "\n";
+        cout << "Total Waktu Belajar: " << a.totalJamLatihan << " jam\n";
+        cout << "Skor Ujian: " << a.skorUjian << "\n";
+        cout << "Nilai Akhir: " << nilaiAkhir(a) << "\n\n";
+    }
+}
+
+int main() {
+    animasiCompetition();  // <-- Panggil animasi di sini
+
+    vector<Anggota> daftar;
+    int n;
+    cout << "Masukkan jumlah calon anggota: ";
